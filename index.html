@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4A90E2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content=" SanMark">
+    <title>SanMark</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8614526ba6.js" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-cookie-bite"></i>
+                </div>
+                <span class="logo-text">SanMark</span>
+            </a>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="goToHome()">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </button>
+                <button class="nav-btn" onclick="openFavorites()">
+                    <i class="fas fa-heart"></i>
+                    <span>المفضلة</span>
+                    <span class="favorites-badge" id="favorites-badge">0</span>
+                </button>
+                <button class="nav-btn cart-btn" onclick="openCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>السلة</span>
+                    <span class="cart-badge" id="cart-badge">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">SanMark</h1>
+                <h2 class="hero-subtitle">  </h2>
+                <p class="hero-description"></p>
+                <div class="hero-features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>طازج يومياً</h4>
+                            <p>نصنع منتجاتنا يومياً بأجود المكونات</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>مكونات طبيعية</h4>
+                            <p>نستخدم أفضل المكونات الطبيعية</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>توصيل سريع</h4>
+                            <p>توصيل خلال 30 دقيقة في جميع أنحاء المدينة</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="cta-button" onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">
+                    <i class="fas fa-shopping-cart"></i>
+                    اطلب الآن
+                </button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&h=500&fit=crop" alt="SanMark " class="floating-donut">
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <!-- قسم الإحصائيات -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">عميل سعيد</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-cookie-bite"></i>
+                    </div>
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">نوع </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">خدمة التوصيل</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-number">4.9</div>
+                    <div class="stat-label">تقييم العملاء</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="products">
+            <div class="container">
+                <h2 class="section-title">منتجاتنا المميزة</h2>
+                <div class="category-buttons">
+                    <!-- سيتم إضافة أزرار الفئات هنا بواسطة JavaScript -->
+                </div>
+                <div id="menu" class="products-grid">
+                    <!-- سيتم إضافة المنتجات هنا بواسطة JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- نافذة السلة المحدثة -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content cart-modal-content">
+            <div class="modal-header cart-header">
+                <h2><i class="fas fa-shopping-cart"></i> سلة المشتريات</h2>
+                <button class="close-btn" onclick="closeCart()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="cart-content">
+                <div class="cart-items-section">
+                    <div id="cart-empty" class="cart-empty" style="display: none;">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>السلة فارغة</p>
+                        <small>أضف بعض المنتجات اللذيذة!</small>
+                    </div>
+                    <div id="cart-items-list" class="cart-items-list"></div>
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>عدد القطع:</span>
+                        <span id="total-items">0</span>
+                    </div>
+                    <div class="summary-row total-row">
+                        <span>المجموع الكلي:</span>
+                        <span id="total-price">0 جنيه</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="checkout-section">
+                <h3><i class="fas fa-truck"></i> معلومات التوصيل</h3>
+                <form id="order-form" class="checkout-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customer-name">
+                                <i class="fas fa-user"></i> الاسم الكامل
+                            </label>
+                            <input type="text" id="customer-name" placeholder="أدخل اسمك الكامل" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customer-phone">
+                                <i class="fas fa-phone"></i> رقم الهاتف
+                            </label>
+                            <div class="phone-input-container">
+                                <span class="country-code">+20</span>
+                                <input type="tel" id="customer-phone" placeholder="1xxxxxxxxx" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-address">
+                            <i class="fas fa-map-marker-alt"></i> العنوان التفصيلي
+                        </label>
+                        <textarea id="customer-address" placeholder="أدخل عنوانك بالتفصيل (الشارع، المنطقة، معالم مميزة)" required></textarea>
+                    </div>
+                    
+                    <!-- قسم طرق الدفع -->
+                    <div class="payment-section">
+                        <h4><i class="fas fa-credit-card"></i> طريقة الدفع</h4>
+                        <div class="payment-methods">
+                            <div class="payment-method" data-method="cash">
+                                <input type="radio" id="cash-payment" name="payment-method" value="cash" checked>
+                                <label for="cash-payment" class="payment-label">
+                                    <div class="payment-icon">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <span class="payment-name">الدفع عند الاستلام</span>
+                                        <small class="payment-desc">ادفع نقداً عند وصول الطلب</small>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="payment-method" data-method="fawry">
+                                <input type="radio" id="fawry-payment" name="payment-method" value="fawry">
+                                <label for="fawry-payment" class="payment-label">
+                                    <div class="payment-icon fawry-icon">
+                                        <i class="fas fa-store"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <span class="payment-name">فوري</span>
+                                        <small class="payment-desc">ادفع من أقرب نقطة فوري</small>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="payment-method" data-method="telda">
+                                <input type="radio" id="telda-payment" name="payment-method" value="telda">
+                                <label for="telda-payment" class="payment-label">
+                                    <div class="payment-icon telda-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <span class="payment-name">تيلدا</span>
+                                        <small class="payment-desc">ادفع بواسطة تطبيق تيلدا</small>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="payment-method" data-method="vodafone">
+                                <input type="radio" id="vodafone-payment" name="payment-method" value="vodafone">
+                                <label for="vodafone-payment" class="payment-label">
+                                    <div class="payment-icon vodafone-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <span class="payment-name">فودافون كاش</span>
+                                        <small class="payment-desc">ادفع بواسطة فودافون كاش</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- معلومات الدفع الإضافية -->
+                        <div id="payment-details" class="payment-details" style="display: none;">
+                            <div id="fawry-details" class="payment-info-box" style="display: none;">
+                                <h5><i class="fas fa-info-circle"></i> تعليمات الدفع بفوري</h5>
+                                <p>سيتم إرسال كود الدفع عبر الرسائل النصية بعد تأكيد الطلب</p>
+                                <ul>
+                                    <li>اذهب لأقرب نقطة فوري</li>
+                                    <li>اطلب دفع فاتورة واعطِ الكود</li>
+                                    <li>ادفع المبلغ المطلوب</li>
+                                </ul>
+                            </div>
+                            
+                            <div id="telda-details" class="payment-info-box" style="display: none;">
+                                <h5><i class="fas fa-info-circle"></i> تعليمات الدفع بتيلدا</h5>
+                                <p>سيتم إرسال رابط الدفع عبر الواتساب بعد تأكيد الطلب</p>
+                                <ul>
+                                    <li>افتح الرابط المرسل</li>
+                                    <li>أدخل بيانات البطاقة أو المحفظة</li>
+                                    <li>أكمل عملية الدفع</li>
+                                </ul>
+                            </div>
+                            
+                            <div id="vodafone-details" class="payment-info-box" style="display: none;">
+                                <h5><i class="fas fa-info-circle"></i> تعليمات الدفع بفودافون كاش</h5>
+                                <p>سيتم إرسال كود الدفع عبر الرسائل النصية بعد تأكيد الطلب</p>
+                                <ul>
+                                    <li>اتصل بـ *9*كود الدفع# من هاتف فودافون</li>
+                                    <li>أو ادخل على تطبيق فودافون كاش</li>
+                                    <li>أدخل كود الدفع والمبلغ المطلوب</li>
+                                    <li>أكد العملية برقمك السري</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-order-btn">
+                        <i class="fas fa-check-circle"></i>
+                        <span>إتمام الطلب</span>
+                        <small id="order-total-btn">0 جنيه</small>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تأكيد الطلب المحسنة -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content confirmation-modal">
+            <div class="confirmation-header">
+                <div class="success-animation">
+                    <div class="checkmark-circle">
+                        <div class="checkmark"></div>
+                    </div>
+                </div>
+                <h2>🎉 تم استلام طلبك بنجاح!</h2>
+                <button class="close-btn" onclick="closeConfirmation()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="confirmation-content">
+                <div class="order-summary">
+                    <div class="order-info-card">
+                        <div class="order-header">
+                            <h3><i class="fas fa-receipt"></i> تفاصيل الطلب</h3>
+                            <span class="order-status pending">قيد المراجعة</span>
+                        </div>
+                        
+                        <div class="order-details">
+                            <div class="detail-row">
+                                <span class="label">رقم الطلب:</span>
+                                <span class="value" id="order-number">#12345</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">التاريخ:</span>
+                                <span class="value" id="order-date"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">طريقة الدفع:</span>
+                                <span class="value" id="payment-method-display">الدفع عند الاستلام</span>
+                            </div>
+                            <div class="detail-row total-row">
+                                <span class="label">المجموع الكلي:</span>
+                                <span class="value" id="order-total-display">0 جنيه</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <h4><i class="fas fa-clock"></i> الخطوات التالية</h4>
+                        <div class="steps-timeline">
+                            <div class="step active">
+                                <div class="step-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>تم استلام الطلب</h5>
+                                    <p>تم تسجيل طلبك بنجاح</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>تأكيد الطلب</h5>
+                                    <p>سنتصل بك خلال 15 دقيقة</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="fas fa-cookie-bite"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>تحضير الطلب</h5>
+                                    <p>سيتم تحضير طلبك بعناية</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>التوصيل</h5>
+                                    <p>سيصل طلبك في الوقت المحدد</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h4><i class="fas fa-headset"></i> تحتاج مساعدة؟</h4>
+                        <div class="contact-buttons">
+                            <a href="tel:+201551513130" class="contact-btn call-btn">
+                                <i class="fas fa-phone"></i>
+                                اتصل بنا
+                            </a>
+                            <a href="https://wa.me/+201551513130" class="contact-btn whatsapp-btn" target="_blank">
+                                <i class="fab fa-whatsapp"></i>
+                                واتساب
+                            </a>
+                        </div>
+                        <p class="contact-note">
+                            <i class="fas fa-info-circle"></i>
+                            احتفظ برقم الطلب للمراجعة أو الإلغاء
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="confirmation-actions">
+                    <button class="btn-continue-shopping" onclick="closeConfirmation()">
+                        <i class="fas fa-shopping-cart"></i>
+                        متابعة التسوق
+                    </button>
+                    <button class="btn-track-order" onclick="trackOrder()">
+                        <i class="fas fa-search"></i>
+                        تتبع الطلب
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="price-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>اختر الكمية</h2>
+                <button class="close-btn" onclick="closePriceModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="price-input-container">
+                <div class="product-details">
+                    <h3 id="selected-product-name"></h3>
+                    <p>سعر القطعة: <span id="selected-product-price"></span> جنيه</p>
+                </div>
+                <div class="form-group">
+                    <label for="quantity-input">كم قطعة تريد؟</label>
+                    <input type="number" id="quantity-input" min="1" step="1" placeholder="عدد القطع" required>
+                    <p class="total-preview">المجموع: <span id="total-preview">0</span> جنيه</p>
+                </div>
+                <button class="submit-price-btn" onclick="confirmPrice()">
+                    <i class="fas fa-check"></i>
+                    تمام
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة التحميل -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="spinner"></div>
+        <div class="loading-text">جاري تحميل متجر SanMark...</div>
+    </div>
+
+    <footer class="premium-footer">
+        <div class="footer-wave">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+            </svg>
+        </div>
+        
+        <div class="footer-content">
+            <div class="footer-section brand-section">
+                <div class="footer-logo">
+                    <div class="logo-icon"></div>
+                    <div class="logo-text">
+                        <h3>SanMark </h3>
+                        <span class="tagline">طعم لا يُنسى</span>
+                    </div>
+                </div>
+                <p class="brand-description">
+                    نحن متخصصون في صنع أشهى أنواع الدونتس الطازجة يومياً باستخدام أجود المكونات الطبيعية. 
+                    تجربة فريدة من النكهات الرائعة التي ستجعلك تعود إلينا مرة أخرى.
+                </p>
+                <div class="quality-badges">
+                    <div class="badge">
+                        <i class="fas fa-award"></i>
+                        <span>جودة مضمونة</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-leaf"></i>
+                        <span>مكونات طبيعية</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4><i class="fas fa-store"></i> خدماتنا</h4>
+                <ul class="service-list">
+                    <li><i class="fas fa-shipping-fast"></i> توصيل سريع</li>
+                    <li><i class="fas fa-birthday-cake"></i> طلبات المناسبات</li>
+                    <li><i class="fas fa-gift"></i> عروض خاصة</li>
+                    <li><i class="fas fa-users"></i> خدمة العملاء 24/7</li>
+                    <li><i class="fas fa-mobile-alt"></i> طلب عبر الهاتف</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4><i class="fas fa-phone-alt"></i> تواصل معنا</h4>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                     
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                     
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <span class="contact-label">ساعات العمل</span>
+                            <span class="contact-value">متاح 24/7</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4><i class="fas fa-share-alt"></i> تابعنا</h4>
+                <p class="social-description">تابع آخر العروض والمنتجات الجديدة</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/share/15w85HMuUd/" class="social-link facebook" target="_blank">
+                        <i class="fab fa-facebook-f"></i>
+                        <div class="social-info">
+                            <span class="social-name">فيسبوك</span>
+                            <span class="social-desc">تابع صفحتنا</span>
+                        </div>
+                    </a>
+                    <a href="https://wa.me/+201551513130" class="social-link whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        <div class="social-info">
+                            <span class="social-name">واتساب</span>
+                            <span class="social-desc">راسلنا مباشرة</span>
+                        </div>
+                    </a>
+                
+                    </a>
+                </div>
+                
+                <div class="newsletter">
+                    <h5><i class="fas fa-bell"></i> اشترك في النشرة</h5>
+                    <p>احصل على العروض الحصرية</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="بريدك الإلكتروني" class="newsletter-input">
+                        <button class="newsletter-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="copyright">
+                </div>
+                <div class="footer-links">
+                    <a href="#privacy">سياسة الخصوصية</a>
+                    <a href="#terms">الشروط والأحكام</a>
+                    <a href="#about">من نحن</a>
+                </div>
+                <div class="back-to-top" onclick="scrollToTop()">
+                    <i class="fas fa-chevron-up"></i>
+                    <span>العودة للأعلى</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="notification" class="notification">
+        <p id="notification-message"></p>
+    </div>
+
+    <!-- Floating Cart Icon -->
+    <button class="cart-icon floating-cart" onclick="openCart()" aria-label="فتح السلة">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cart-badge-floating" style="display: none;">0</span>
+    </button>
+
+    <script src="js.js"></script>
+    <script src="payment-handler.js"></script>
+    <script>
+        // تحميل الإعدادات من Firebase وتطبيقها على الصفحة
+        async function loadSiteSettings() {
+            try {
+                const settingsDoc = await db.collection('settings').doc('general').get();
+                if (settingsDoc.exists) {
+                    const settings = settingsDoc.data();
+                    
+                    // تطبيق اسم الموقع
+                    if (settings.siteName) {
+                        document.title = settings.siteName;
+                        document.querySelector('.logo-text').textContent = settings.siteName.split(' ')[0];
+                        document.querySelector('.hero-title').innerHTML = `🍩 ${settings.siteName}`;
+                        document.querySelector('.footer-logo h3').textContent = settings.siteName;
+                    }
+                    
+                    // تطبيق وصف الموقع
+                    if (settings.siteDescription) {
+                        document.querySelector('.hero-subtitle').textContent = settings.siteDescription;
+                        document.querySelector('.brand-description').textContent = settings.siteDescription;
+                    }
+                }
+                
+                // تحميل إعدادات المظهر
+                const appearanceDoc = await db.collection('settings').doc('appearance').get();
+                if (appearanceDoc.exists) {
+                    const appearance = appearanceDoc.data();
+                    
+                    // تطبيق الألوان
+                    if (appearance.primaryColor || appearance.secondaryColor) {
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            :root {
+                                --primary-color: ${appearance.primaryColor || '#4A90E2'};
+                                --secondary-color: ${appearance.secondaryColor || '#2ECC71'};
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                }
+                
+                // تحميل إعدادات الوسائط (الصور)
+                const mediaDoc = await db.collection('settings').doc('media').get();
+                if (mediaDoc.exists) {
+                    const media = mediaDoc.data();
+                    if (media.heroImageUrl) {
+                        const heroImg = document.querySelector('.floating-donut');
+                        if (heroImg) heroImg.src = media.heroImageUrl;
+                    }
+                }
+
+                // تحميل معلومات المتجر
+                const businessDoc = await db.collection('settings').doc('business').get();
+                if (businessDoc.exists) {
+                    const business = businessDoc.data();
+                    
+                    // تطبيق معلومات الاتصال
+                    if (business.phoneNumber) {
+                        const phoneElements = document.querySelectorAll('.contact-value');
+                        if (phoneElements[0]) phoneElements[0].textContent = business.phoneNumber;
+                    }
+                    
+                    if (business.address) {
+                        const addressElements = document.querySelectorAll('.contact-value');
+                        if (addressElements[1]) addressElements[1].textContent = business.address;
+                    }
+                    
+                    if (business.workingHours) {
+                        const hoursElements = document.querySelectorAll('.contact-value');
+                        if (hoursElements[2]) hoursElements[2].textContent = business.workingHours;
+                    }
+                }
+                
+            } catch (error) {
+                console.log('تعذر تحميل الإعدادات:', error);
+            }
+        }
+        
+        // تحميل الإعدادات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', loadSiteSettings);
+        
+        // دالة تتبع الطلب
+        function trackOrder() {
+            const orderNumber = document.getElementById('order-number').textContent;
+            alert(`سيتم إضافة نظام تتبع الطلبات قريباً\nرقم طلبك: ${orderNumber}`);
+        }
+        
+        // تحديث معلومات التواصل من الإعدادات
+        async function updateContactInfo() {
+            try {
+                const socialDoc = await db.collection('settings').doc('social').get();
+                if (socialDoc.exists) {
+                    const social = socialDoc.data();
+                    
+                    // تحديث أرقام الهاتف والواتساب
+                    const phoneElements = document.querySelectorAll('a[href^="tel:"]');
+                    const whatsappElements = document.querySelectorAll('a[href^="https://wa.me/"]');
+                    
+                    if (social.whatsappNumber) {
+                        phoneElements.forEach(el => {
+                            el.href = `tel:${social.whatsappNumber}`;
+                        });
+                        whatsappElements.forEach(el => {
+                            el.href = `https://wa.me/${social.whatsappNumber}`;
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log('تعذر تحميل معلومات التواصل:', error);
+            }
+        }
+        
+        // تحديث معلومات التواصل عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', updateContactInfo);
+        
+        // ===== تطبيق تغييرات الصفحة الرئيسية من الأدمن =====
+        async function applyHomepageChanges() {
+            try {
+                const homepageDoc = await db.collection('settings').doc('homepage').get();
+                if (homepageDoc.exists) {
+                    const data = homepageDoc.data();
+                    
+                    // تطبيق العنوان الرئيسي
+                    if (data.heroTitle) {
+                        const titleElement = document.querySelector('.hero-title');
+                        if (titleElement) titleElement.textContent = data.heroTitle;
+                    }
+                    
+                    // تطبيق العنوان الفرعي
+                    if (data.heroSubtitle) {
+                        const subtitleElement = document.querySelector('.hero-subtitle');
+                        if (subtitleElement) subtitleElement.textContent = data.heroSubtitle;
+                    }
+                    
+                    // تطبيق الوصف
+                    if (data.heroDescription) {
+                        const descElement = document.querySelector('.hero-description');
+                        if (descElement) descElement.textContent = data.heroDescription;
+                    }
+                    
+                    // تطبيق صورة الخلفية
+                    if (data.heroImage) {
+                        const imageElement = document.querySelector('.floating-donut');
+                        if (imageElement) imageElement.src = data.heroImage;
+                    }
+                    
+                    // تطبيق المميزات
+                    if (data.features && data.features.length >= 3) {
+                        const featureElements = document.querySelectorAll('.feature');
+                        data.features.forEach((feature, index) => {
+                            if (featureElements[index]) {
+                                const iconElement = featureElements[index].querySelector('.feature-icon i');
+                                const titleElement = featureElements[index].querySelector('h4');
+                                const descElement = featureElements[index].querySelector('p');
+                                
+                                if (iconElement) iconElement.className = feature.icon;
+                                if (titleElement) titleElement.textContent = feature.title;
+                                if (descElement) descElement.textContent = feature.description;
+                            }
+                        });
+                    }
+                    
+                    // تطبيق الإحصائيات
+                    if (data.stats && data.stats.length >= 3) {
+                        const statNumbers = document.querySelectorAll('.stat-number');
+                        const statLabels = document.querySelectorAll('.stat-label');
+                        
+                        data.stats.forEach((stat, index) => {
+                            if (statNumbers[index]) statNumbers[index].textContent = stat.number;
+                            if (statLabels[index]) statLabels[index].textContent = stat.label;
+                        });
+                    }
+                    
+                    // تطبيق الألوان
+                    if (data.colors) {
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            :root {
+                                --primary-color: ${data.colors.primary || '#6366f1'} !important;
+                                --secondary-color: ${data.colors.secondary || '#8b5cf6'} !important;
+                                --accent-color: ${data.colors.accent || '#f59e0b'} !important;
+                                --success-color: ${data.colors.success || '#10b981'} !important;
+                                --gradient-primary: linear-gradient(135deg, ${data.colors.primary || '#6366f1'}, ${data.colors.secondary || '#8b5cf6'}) !important;
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                }
+            } catch (error) {
+                console.log('تعذر تحميل إعدادات الصفحة الرئيسية:', error);
+            }
+        }
+        
+        // تطبيق التغييرات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            applyHomepageChanges();
+            // إعادة تطبيق التغييرات كل 30 ثانية للحصول على التحديثات
+            setInterval(applyHomepageChanges, 30000);
+            
+            // مستمع للتحديثات الفورية من الأدمن
+            if (typeof BroadcastChannel !== 'undefined') {
+                const channel = new BroadcastChannel('homepage-updates');
+                channel.addEventListener('message', (event) => {
+                    if (event.data.type === 'homepage-updated') {
+                        console.log('تم استلام تحديث من الأدمن');
+                        setTimeout(applyHomepageChanges, 500); // تأخير قصير للتأكد من حفظ البيانات
+                    }
+                });
+            }
+        });
+        
+        // ===== نظام المفضلة =====
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        
+        // تحديث عداد المفضلة
+        function updateFavoritesCount() {
+            const badge = document.getElementById('favorites-badge');
+            if (badge) {
+                badge.textContent = favorites.length;
+                badge.style.display = favorites.length > 0 ? 'flex' : 'none';
+            }
+        }
+        
+        // إضافة/إزالة من المفضلة
+        function toggleFavorite(productId, productName, productPrice, productImage) {
+            const existingIndex = favorites.findIndex(item => item.id === productId);
+            
+            if (existingIndex > -1) {
+                // إزالة من المفضلة
+                favorites.splice(existingIndex, 1);
+                showNotification('تم إزالة المنتج من المفضلة', 'info');
+            } else {
+                // إضافة للمفضلة
+                favorites.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    image: productImage,
+                    dateAdded: new Date().toISOString()
+                });
+                showNotification('تم إضافة المنتج للمفضلة', 'success');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoritesCount();
+            updateFavoriteButtons();
+        }
+        
+        // تحديث أزرار المفضلة
+        function updateFavoriteButtons() {
+            const favoriteButtons = document.querySelectorAll('.favorite-btn');
+            favoriteButtons.forEach(btn => {
+                const productId = btn.dataset.productId;
+                const isFavorite = favorites.some(item => item.id === productId);
+                
+                if (isFavorite) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="fas fa-heart"></i>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="far fa-heart"></i>';
+                }
+            });
+        }
+        
+        // فتح صفحة المفضلة
+        function openFavorites() {
+            if (favorites.length === 0) {
+                showNotification('لا توجد منتجات في المفضلة', 'info');
+                return;
+            }
+            
+            let favoritesHTML = `
+                <div class="favorites-modal">
+                    <div class="favorites-content">
+                        <div class="favorites-header">
+                            <h2><i class="fas fa-heart"></i> المنتجات المفضلة</h2>
+                            <button class="close-btn" onclick="closeFavorites()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="favorites-body">
+                            <div class="favorites-grid">
+            `;
+            
+            favorites.forEach(item => {
+                favoritesHTML += `
+                    <div class="favorite-item">
+                        <div class="favorite-image">
+                            <img src="${item.image}" alt="${item.name}">
+                        </div>
+                        <div class="favorite-info">
+                            <h4>${item.name}</h4>
+                            <p class="favorite-price">${item.price} جنيه</p>
+                            <div class="favorite-actions">
+                                <button class="btn-primary" onclick="addToCartFromFavorites('${item.id}', '${item.name}', ${item.price}, '${item.image}')">
+                                    <i class="fas fa-cart-plus"></i> إضافة للسلة
+                                </button>
+                                <button class="btn-danger" onclick="removeFromFavorites('${item.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            favoritesHTML += `
+                            </div>
+                        </div>
+                        <div class="favorites-footer">
+                            <button class="btn-secondary" onclick="clearAllFavorites()">
+                                <i class="fas fa-trash-alt"></i> مسح الكل
+                            </button>
+                            <button class="btn-primary" onclick="addAllToCart()">
+                                <i class="fas fa-cart-plus"></i> إضافة الكل للسلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', favoritesHTML);
+        }
+        
+        // إغلاق صفحة المفضلة
+        function closeFavorites() {
+            const modal = document.querySelector('.favorites-modal');
+            if (modal) modal.remove();
+        }
+        
+        // إزالة من المفضلة
+        function removeFromFavorites(productId) {
+            favorites = favorites.filter(item => item.id !== productId);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoritesCount();
+            
+            // تحديث العرض
+            const favoriteItem = document.querySelector(`[data-product-id="${productId}"]`).closest('.favorite-item');
+            if (favoriteItem) favoriteItem.remove();
+            
+            if (favorites.length === 0) {
+                closeFavorites();
+                showNotification('تم مسح جميع المنتجات من المفضلة', 'info');
+            } else {
+                showNotification('تم إزالة المنتج من المفضلة', 'info');
+            }
+        }
+        
+        // مسح جميع المفضلة
+        function clearAllFavorites() {
+            if (confirm('هل أنت متأكد من مسح جميع المنتجات المفضلة؟')) {
+                favorites = [];
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                updateFavoritesCount();
+                closeFavorites();
+                showNotification('تم مسح جميع المنتجات من المفضلة', 'info');
+            }
+        }
+        
+        // إضافة من المفضلة للسلة
+        function addToCartFromFavorites(productId, productName, productPrice, productImage) {
+            addToCart(productId, productName, productPrice, productImage);
+            showNotification('تم إضافة المنتج للسلة', 'success');
+        }
+        
+        // إضافة جميع المفضلة للسلة
+        function addAllToCart() {
+            favorites.forEach(item => {
+                addToCart(item.id, item.name, item.price, item.image);
+            });
+            showNotification(`تم إضافة ${favorites.length} منتج للسلة`, 'success');
+            closeFavorites();
+        }
+        
+        // تحميل عداد المفضلة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            updateFavoritesCount();
+            updateFavoriteButtons();
+        });
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
